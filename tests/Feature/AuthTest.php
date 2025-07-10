@@ -50,4 +50,40 @@ class AuthTest extends TestCase
         $response->assertStatus(200); // Espera respuesta exitosa de la API
         $this->assertArrayHasKey('token', $response->json());
     }
+    public function test_login()
+    {
+        // Primero, registra un usuario para poder iniciar sesión.
+        $registerResponse = $this->post('/api/register', [
+            'name' => 'Test User',
+            'email' => 'testuser@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+        // Ahora, intenta iniciar sesión con las credenciales del usuario registrado.
+        $response = $this->post('/api/login', [
+            'email' => 'testuser@example.com',
+            'password' => 'password',
+        ]);
+        $response->assertStatus(200); // Verifica que la respuesta sea exitosa
+        $this->assertArrayHasKey('token', $response->json()); // Verifica
+    }
+    public function test_logout(){
+         // Primero, registra un usuario para poder iniciar sesión.
+        $registerResponse = $this->post('/api/register', [
+            'name' => 'Test User',
+            'email' => 'testuser@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+        // Ahora, intenta iniciar sesión con las credenciales del usuario registrado.
+        $Loginresponse = $this->post('/api/login', [
+            'email' => 'testuser@example.com',
+            'password' => 'password',
+        ]);
+        $responese = $this->post('/api/logout', [], [
+            'Authorization' => 'Bearer ' . $Loginresponse->json()['token'], // Usa el token obtenido al iniciar sesión
+        ]);
+        $responese->assertStatus(200); // Verifica que la respuesta sea exitosa
+        $this->assertEquals('Sesión cerrada correctamente', $responese->json()['message']); // Verifica que el mensaje de respuesta sea el esperado
+    }
 }

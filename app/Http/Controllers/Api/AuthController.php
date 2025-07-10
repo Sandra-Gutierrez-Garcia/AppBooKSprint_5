@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -25,7 +26,7 @@ class AuthController extends Controller
         ]);
             
     }
-    public function login(UserRequest $request){
+    public function login(LoginRequest $request){
         $request->validated();
         $user = User::where('email', $request->email)->first();
 

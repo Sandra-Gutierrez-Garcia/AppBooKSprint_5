@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+   //define the realationship with the BookLikeModel
+    public function book()
+    {
+        return $this->belongsToMany(Book::class, 'like_book', 'iduser', 'idbook');
+    }
+
+    
+
 }

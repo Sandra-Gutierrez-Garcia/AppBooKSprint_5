@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('writer', function (Blueprint $table) {
         $table->uuid('idwriter')->primary();
         $table->string('name');
-        $table->string('username')->unique();
         $table->text('biography')->nullable();
         $table->string('photo')->nullable();
         $table->string('iduser')->unique();

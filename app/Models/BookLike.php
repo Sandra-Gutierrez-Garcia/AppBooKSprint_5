@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class BookLike extends Model
 {
     protected $table = 'like_book';
-    protected $primaryKey = 'idbook';
     public $timestamps = false;
 
     protected $fillable = 

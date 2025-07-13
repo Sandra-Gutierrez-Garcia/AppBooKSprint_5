@@ -11,6 +11,7 @@ class Book extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'idbook',
         'title',
         'idwriter',
         'description',

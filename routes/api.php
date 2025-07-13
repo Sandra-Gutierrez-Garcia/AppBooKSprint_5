@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WriterController;
 
 // API routes for authentication
 Route::middleware('auth:api')->group(function () {
@@ -16,4 +17,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
+});
+
+// API routes for writers
+Route::middleware('auth:api')->group(function(){
+    Route::get('/writers', [WriterController::class, 'index']);
+    Route::get('/writers/{id}',[WriterController::class, 'show']);
+    Route::post('/writers', [WriterController::class, 'store']);
+    Route::put('/writers/{id}', [WriterController::class, 'update']);
+    Route::delete('/writers/{id}', [WriterController::class, 'destroy']);
+
 });

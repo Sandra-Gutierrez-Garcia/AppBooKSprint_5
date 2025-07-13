@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class GenreBook extends Model
 {
     protected $table = 'genre_book';
-    protected $primaryKey = 'idbook';
     public $timestamps = false;
 
     // Define the fillable attributes if needed

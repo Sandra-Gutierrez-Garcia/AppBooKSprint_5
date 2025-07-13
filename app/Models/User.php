@@ -19,6 +19,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        
         'name',
         'email',
         'password',
@@ -46,11 +47,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-   //define the realationship with the BookLikeModel
-    public function book()
+    public function bookLikes()
     {
         return $this->belongsToMany(Book::class, 'like_book', 'iduser', 'idbook');
     }
+
+    public function writer()
+    {
+        return $this->hasOne(Writer::class, 'iduser', 'id');
+    }
+   
 
     
 

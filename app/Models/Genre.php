@@ -11,6 +11,7 @@ class Genre extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'idgenre',
         'namegenre',
     ];
 

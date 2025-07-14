@@ -130,5 +130,19 @@ class BookControllerTest extends TestCase
   
     public function testBookDelete()
     {
+         $user = User::factory()->create([
+            'role' => 'writer'
+        ]);
+
+        $writer = Writer::factory()->create([
+            'iduser' => $user->id
+        ]);
+
+        $book = Book::factory()->create([
+            'idwriter' => $writer->idwriter
+        ]);
+        $response = $this->actingAs($user,'api')->delete("api/book/{$book->idbook}");
+        $response->assertStatus(200);
+        $response->assertSee('Book deleted successfully');
     }
 }

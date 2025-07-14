@@ -81,7 +81,10 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if(!$book){
-            return response()->json(['message' => 'Book not found'], 404);
+            return response()->json(
+                ['message' => 'Book not found'],
+                404
+            );
         }
         return response()->json([
             'message' => 'Writer found',
@@ -98,7 +101,9 @@ class BookController extends Controller
     {
          $userID = $request->user();
         if($userID->role == 'reader'){
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(
+                ['message' => 'Unauthorized'], 
+                403);
         }
         else {  
             //buscamos la idWriter del escritor
@@ -107,7 +112,9 @@ class BookController extends Controller
             $book = Book::findOrfail($id);
 
             if(!$book|| $book->idwriter != $idWriter){
-                return response()->json(['message' => 'Unauthorized'], 403);
+                return response()->json(
+                    ['message' => 'Unauthorized'], 
+                    403);
             }
             $validated = $request->validated();
 
@@ -118,15 +125,38 @@ class BookController extends Controller
         }
             $book->update($validated);
             
-            return response()->json(['message' => 'Book updated successfully'], 200);
+            return response()->json(
+                ['message' => 'Book updated successfully'],
+                 200);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+         $userID = $request->user();
+        if($userID->role == 'reader'){
+            return response()->json(
+                ['message' => 'Unauthorized'], 
+                403);
+        }
+        else{
+            //buscamos la idWriter del escritor
+            $idWriter = $userID->writer->idwriter;
+            //buscamos el libro id que quieres modificar
+            $book = Book::findOrfail($id);
+
+            if(!$book|| $book->idwriter != $idWriter){
+                return response()->json([
+                    'message' => 'Unauthorized'],
+                     403);
+            }
+            $book->delete();
+            return response()->json([
+                'message' => 'Book deleted successfully'
+            ], 200);
+        }
     }
 }

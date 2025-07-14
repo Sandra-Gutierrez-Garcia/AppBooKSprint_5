@@ -9,6 +9,7 @@ use App\Models\Writer;
 use App\Models\User;
 use Illuminate\Support\Str;
 
+
 class BookControllerTest extends TestCase
 {
     use RefreshDatabase;
@@ -26,16 +27,41 @@ class BookControllerTest extends TestCase
    
     public function testBookShow()
     {
-         
+       $user = User::factory()->create([
+            'role' => 'writer'
+        ]);
+        $writer = Writer::factory()->create([
+            'iduser' => $user->id,
+        ]);
 
+        $book = Book::factory()->create(
+            ['idwriter' => $writer]);
+        $response = $this->get("api/books/{$book->idbook}");
+        $response->assertStatus(200); 
+    }
+    public function testBookShowNotFound()
+    {
+        $user = User::factory()->create([
+            'role' => 'writer'
+        ]);
+        $writer = Writer::factory()->create([
+            'iduser' => $user->id,
+        ]);
 
+        $book = Book::factory()->create(
+            ['idwriter' => $writer]);
+        
+        $book->delete();
 
+        $response = $this->get("api/books/{$book->idbook}");
+        $response->assertStatus(404);
+        $response->assertSee('Book not found');
     }
 
  
     public function testBookStore()
     {
-        
+
         $user = User::factory()->create([
             'role' => 'writer'
         ]);

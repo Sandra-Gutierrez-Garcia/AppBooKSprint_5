@@ -75,17 +75,28 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id,Request $request)
     {
-        //
-    }
+
+        $book = Book::find($id);
+
+        if(!$book){
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+        return response()->json([
+            'message' => 'Writer found',
+            'writer' => $book
+        ], 200);
+        
+
+        }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        
     }
 
     /**

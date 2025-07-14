@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Writer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,7 +18,7 @@ class WriterFactory extends Factory
             'name' => $this->faker->name(),
             'biography' => $this->faker->paragraph(),
             'photo' => null,
-            // 'iduser' se debe asignar explícitamente en los tests para evitar inconsistencias
+
         ];
     }
    

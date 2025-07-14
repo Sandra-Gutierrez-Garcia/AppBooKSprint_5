@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+    use HasFactory;
     protected $table = 'book';
     protected $primaryKey = 'idbook';
     public $timestamps = false;
@@ -15,7 +17,7 @@ class Book extends Model
         'title',
         'idwriter',
         'description',
-        'publication_date',
+        'publish_date',
         'photo',
         'content',
         

@@ -94,9 +94,32 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update( BookRequest $request, string $id)
     {
-        
+         $userID = $request->user();
+        if($userID->role == 'reader'){
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        else {  
+            //buscamos la idWriter del escritor
+            $idWriter = $userID->writer->idwriter;
+            //buscamos el libro id que quieres modificar
+            $book = Book::findOrfail($id);
+
+            if(!$book|| $book->idwriter != $idWriter){
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+            $validated = $request->validated();
+
+            //procesar la imagen
+            if ($request->hasFile('photo')) {
+            $imagePath = $request->file('photo')->store('books', 'public');
+            $validated['photo'] = $imagePath;
+        }
+            $book->update($validated);
+            
+            return response()->json(['message' => 'Book updated successfully'], 200);
+        }
     }
 
     /**

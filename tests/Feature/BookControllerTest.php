@@ -81,6 +81,7 @@ class BookControllerTest extends TestCase
         $response->assertSee(['Book created successfully']);
 
     }
+
     public function testNotAuthorizedCreateBook(){
 
         $user=user::factory()->create([
@@ -103,6 +104,27 @@ class BookControllerTest extends TestCase
  
     public function testBookUpdate()
     {
+        $user = User::factory()->create([
+            'role' => 'writer'
+        ]);
+
+        $writer = Writer::factory()->create([
+            'iduser' => $user->id
+        ]);
+
+        $book = Book::factory()->create([
+            'idwriter' => $writer->idwriter
+        ]);
+
+         $response = $this->actingAs($user,'api')->put("api/book/{$book->idbook}",[
+            'title' => 'Book Name updated',
+            'description' => 'Book description updated',
+            'publish_date' => now(),
+            'photo' => null,
+            'content' => 'Book content updated',
+        ]);
+        $response->assertStatus(200);
+        $response->assertSee('Book updated successfully');
     }
 
   

@@ -74,7 +74,7 @@ class WriterController extends Controller
 
         // Verifica si el escritor existe y si pertenece al usuario autenticado
         if (!$writer || $writer->iduser !== $userId) {
-            return response()->json(['message' => 'Writer not found'], 404);
+            return response()->json(['message' => 'Unauthorized'], 404);
 
         } else {
             

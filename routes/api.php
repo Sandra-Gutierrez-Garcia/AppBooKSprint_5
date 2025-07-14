@@ -38,5 +38,8 @@ Route::get('/books/{id}', [BookController::class, 'show']);
 
 Route::middleware('auth:api')->group(function(){
     Route::post('/book',[BookController::class, 'store']);
+    Route::put('/book/{id}', [BookController::class, 'update']);
+
+
 });
 

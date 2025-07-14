@@ -29,10 +29,14 @@ class WriterController extends Controller
     public function store(WriterRequest $request){
 
         $validated = $request->validated();
-        $writer = Writer::create($validated + [
-            'idwriter' => Str::uuid()->toString(),
-            'iduser' => $request->user()->id,
-        ]);
+        // Asignar el iduser del usuario autenticado
+        $validated['iduser'] = $request->user()->id;
+
+        // Generar un UUID para idwriter
+        $validated['idwriter'] = Str::uuid()->toString();
+        
+        // Crear el escritor
+        Writer::create($validated);
                
         return response()->json(
             ['message' => 'Author created successfully'], 201

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WriterController;
+use App\Http\Controllers\Api\BookController; // ← Agregar esta línea
+
+
 
 // API routes for authentication
 Route::middleware('auth:api')->group(function () {
@@ -28,3 +31,11 @@ Route::middleware('auth:api')->group(function(){
     Route::delete('/writers/{id}', [WriterController::class, 'destroy']);
 
 });
+
+// API routes for Book
+Route::get('/books',[BookController::class, 'index']);
+
+Route::middleware('auth:api')->group(function(){
+    Route::post('/book',[BookController::class, 'store']);
+});
+

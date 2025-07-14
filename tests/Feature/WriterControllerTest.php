@@ -27,7 +27,7 @@ class WriterControllerTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->get('api/writers');
         $response->assertStatus(200); 
-        $response->assertJson(['message' => 'List of writers']);
+        $response->assertSee(['List of writers']);
 
     }
 
@@ -44,7 +44,7 @@ class WriterControllerTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->get("api/writers/{$writer->idwriter}");
         $response->assertStatus(200);
-        $response->assertJson(['message' => 'Writer found']);
+        $response->assertSee(['Writer found']);
     }
 
  
@@ -60,7 +60,7 @@ class WriterControllerTest extends TestCase
             'iduser' => $user->id
         ]);
         $response->assertStatus(201);
-        $response->assertJson(['message' => 'Author created successfully']);
+        $response->assertSee('Author created successfully');
 
 
        

@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group(function(){
 // API routes for Book
 Route::get('/books',[BookController::class, 'index']);
 Route::get('/books/{id}', [BookController::class, 'show']);
-Route::post('/books/filter', [BookController::class, 'filterGeners']); // Nueva ruta para filtrar
+Route::post('/books/filter', [BookController::class, 'filterGeners']); 
 
 Route::middleware('auth:api')->group(function(){
     Route::post('/book',[BookController::class, 'store']);

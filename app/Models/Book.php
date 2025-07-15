@@ -20,6 +20,7 @@ class Book extends Model
         'publish_date',
         'photo',
         'content',
+        'status'
         
     ];
     // Define the relationship with the Writer model

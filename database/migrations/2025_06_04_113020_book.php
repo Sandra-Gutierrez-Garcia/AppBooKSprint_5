@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('description');
             $table->date('publish_date')->nullable();
             $table->string('photo')->nullable();
-            $table->text('content'); // Añadir campo faltante
-            $table->timestamps(); // Agregar timestamps
+            $table->text('content');
+            $table->enum('status', ['pending', 'completed', 'rejected'])->default('pending');
+            $table->timestamps();
 
 
 

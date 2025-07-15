@@ -8,7 +8,6 @@ use App\Models\Book;
 use App\Models\Writer;
 use App\Models\User;
 use App\Models\BookLike;
-use Illuminate\Support\Str;
 
 class UserControllerTest extends TestCase
 {
@@ -107,5 +106,39 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($user, 'api')->delete("api/books/{$book->idbook}/like");
         $response->assertStatus(200);
     }
-
+     public function testSeelikedBooks()
+    {
+        $user = User::factory()->create([
+            'role' => 'reader'
+        ]);
+        
+        // Crear un writer y un libro
+        $writerUser = User::factory()->create();
+        $writer = Writer::factory()->create([
+            'iduser' => $writerUser->id
+        ]);
+        $book = Book::factory()->create([
+            'idwriter' => $writer->idwriter
+        ]);
+        
+        // Crear un like para el libro
+        BookLike::factory()->create([
+            'idbook' => $book->idbook,
+            'iduser' => $user->id
+        ]);
+        
+        $response = $this->actingAs($user, 'api')->get('api/book/liked');
+        $response->assertStatus(200);
+        
+        // Verificar que devuelve al menos un libro
+        $response->assertJsonStructure([
+            'message',
+            'data' => [
+                '*' => [
+                    'idbook',
+                    'title'
+                ]
+            ]
+        ]);
+    }
 }

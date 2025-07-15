@@ -13,6 +13,7 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\Else_;
+use Termwind\Components\Li;
 
 class UserController extends Controller
 {
@@ -143,6 +144,22 @@ class UserController extends Controller
         
     }
 
+    public function seeLikeBooks(){
+           $user = Auth::user();
+        if(!$user || $user->role != 'reader') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        //buscamos la id de los libros que le gustan al usuario
+        $bookIds = BookLike::where('iduser', $user->id)->pluck('idbook');
+        
+        // Obtenemos los libros que le gustan al usuario
+        $likedBooks = Book::whereIn('idbook', $bookIds)->get();
+
+        return response()->json([
+            'message' => 'Liked books retrieved successfully',
+            'data' => $likedBooks
+        ], 200);
+    }
     
     
     

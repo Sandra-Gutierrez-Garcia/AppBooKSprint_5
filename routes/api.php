@@ -23,6 +23,8 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::post('/books/{id}/like', [UserController::class, 'addBookLike']);
     Route::delete('/books/{id}/like', [UserController::class, 'removeBookLike']);
+    Route::get('/book/liked', [UserController::class, 'seeLikeBooks']);
+
 
 
 });

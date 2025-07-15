@@ -159,4 +159,27 @@ class BookController extends Controller
             ], 200);
         }
     }
+    public function filterGeners( Request $request){
+    
+        //Guardar el género seleccionado en la sesión
+        session(['SelectGenre' => $request->input('idgenres')]);
+
+        //filtrar los libros por el género seleccionado
+        $books = Book::whereIn('idgenres', session('SelectGenre', []))->get();
+        
+        // Devolver una respuesta JSON 
+        return response()->json([
+        'message' => 'Libros filtrados',
+        'books' => $books
+    ], 200);    
+    
+    //si no seleciona ningun genero
+    if(!$request->has('idgenres')){
+        $books = Book::all();
+        return response()->json([
+            'message' => 'No se seleccionó ningún género',
+            'books' => $books,
+        ], 200);
+        }
+    }
 }

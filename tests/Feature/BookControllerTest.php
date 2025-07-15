@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\Book;
 use App\Models\Writer;
 use App\Models\User;
+use App\Models\Genre;
 use Illuminate\Support\Str;
 
 
@@ -144,5 +145,23 @@ class BookControllerTest extends TestCase
         $response = $this->actingAs($user,'api')->delete("api/book/{$book->idbook}");
         $response->assertStatus(200);
         $response->assertSee('Book deleted successfully');
+    }
+   
+    public function testBookFilter(){
+        // Probar con géneros
+        $response = $this->post('api/books/filter', [
+            'idgenres' => [1, 2]
+        ]);
+        
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['message', 'books']);
+        
+    }
+    public function testBookSelectdontgenres(){
+         $response = $this->post('api/books/filter', [
+            'idgenres' => []
+        ]);
+        $response->assertStatus(200);
+        
     }
 }

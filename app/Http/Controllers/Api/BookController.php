@@ -159,27 +159,55 @@ class BookController extends Controller
             ], 200);
         }
     }
+    /**
+     * Filter books by genres.
+     */
     public function filterGeners( Request $request){
-    
-        //Guardar el género seleccionado en la sesión
-        session(['SelectGenre' => $request->input('idgenres')]);
+        // PRIMERO verificar si hay géneros
 
-        //filtrar los libros por el género seleccionado
-        $books = Book::whereIn('idgenres', session('SelectGenre', []))->get();
-        
-        // Devolver una respuesta JSON 
-        return response()->json([
-        'message' => 'Libros filtrados',
-        'books' => $books
-    ], 200);    
-    
-    //si no seleciona ningun genero
-    if(!$request->has('idgenres')){
-        $books = Book::all();
-        return response()->json([
-            'message' => 'No se seleccionó ningún género',
-            'books' => $books,
-        ], 200);
+      $selectedgenres = $request->input('idgenres');
+      if(!$selectedgenres || empty($selectedgenres)){
+            return response()->json([
+                'message' => 'No genres selected',
+                'books' => Book::all(),
+            ], 200);
         }
+        // Guardar los géneros seleccionados en la sesión
+        session(['SelectGenre' => $selectedgenres]);
+        $books = Book::whereIn('idgenres', session('SelectGenre', []))->get();
+    
+        return response()->json([
+            'message' => 'Libros filtrados',
+            'books' => $books
+        ], 200);    
     }
+    /**
+     * Filter books by status.
+     */
+    public function filterStatus(Request $request){
+        // 
+        $selectedStatus = $request->input('status');
+
+        if(!$selectedStatus) {
+            return response()->json([
+                'message' => 'No status selected',
+                'books' => Book::all(),
+            ], 200);
+        } else{
+            
+            session(['SelectStatus' => $selectedStatus]);
+            $books = Book::where('status', $selectedStatus)->get();
+
+            return response()->json([
+                'message' => 'Books filtered by status',
+                'books' => $books,
+            ], 200);
+
+
+        }
+
+
+
+    }
+
 }

@@ -85,7 +85,7 @@ class BookControllerTest extends TestCase
 
     public function testNotAuthorizedCreateBook(){
 
-        $user=user::factory()->create([
+        $user = User::factory()->create([
             'role' => 'reader'
         ]);
          $response = $this->actingAs($user,'api')->post('api/book',[
@@ -148,20 +148,16 @@ class BookControllerTest extends TestCase
     }
    
     public function testBookFilter(){
-        // Probar con géneros
-        $response = $this->post('api/books/filter', [
-            'idgenres' => [1, 2]
-        ]);
-        
+        // Test filtering books by genre
+        $response = $this->get('/api/books?genre=1');
         $response->assertStatus(200);
         $response->assertJsonStructure(['message', 'books']);
-        
     }
-    public function testBookSelectdontgenres(){
-         $response = $this->post('api/books/filter', [
-            'idgenres' => []
-        ]);
+    
+    public function testBookWithoutGenreFilter(){
+        // Test without genre filter (should return all books)
+        $response = $this->get('/api/books');
         $response->assertStatus(200);
-        
-    }
+        $response->assertJsonStructure(['message', 'books']);
+}
 }

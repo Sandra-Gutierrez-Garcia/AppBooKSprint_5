@@ -37,8 +37,10 @@ Route::middleware('auth:api')->group(function(){
 
 // API routes for Book
 Route::get('/books',[BookController::class, 'index']);
+Route::get('/book-filter', [BookController::class, 'filterGeners']);
+Route::get('/book-filter-status', [BookController::class, 'filterStatus']);
 Route::get('/books/{id}', [BookController::class, 'show']);
-Route::post('/books/filter', [BookController::class, 'filterGeners']); 
+
 
 Route::middleware('auth:api')->group(function(){
     Route::post('/book',[BookController::class, 'store']);
@@ -48,4 +50,5 @@ Route::middleware('auth:api')->group(function(){
 
 
 });
+
 

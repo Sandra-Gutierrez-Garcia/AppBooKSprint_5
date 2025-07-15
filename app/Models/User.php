@@ -51,11 +51,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Book::class, 'like_book', 'iduser', 'idbook');
     }
+    
+
 
     public function writer()
     {
         return $this->hasOne(Writer::class, 'iduser', 'id');
     }
+   
+
    
 
     

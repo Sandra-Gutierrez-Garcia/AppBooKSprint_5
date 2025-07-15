@@ -18,7 +18,6 @@ class WriterFactory extends Factory
             'name' => $this->faker->name(),
             'biography' => $this->faker->paragraph(),
             'photo' => null,
-
         ];
     }
    

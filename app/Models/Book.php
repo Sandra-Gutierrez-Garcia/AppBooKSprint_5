@@ -30,7 +30,7 @@ class Book extends Model
     }
 
     // Define the relationship with the Genre model
-    public function genre_Book()
+    public function genres()
     {
         return $this->belongsToMany(Genre::class, 'genres_book', 'idbook', 'idgenre');
     }

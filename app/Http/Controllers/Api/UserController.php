@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Book;
+use App\Models\BookLike;
+
+
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -95,6 +99,51 @@ class UserController extends Controller
 
         }
     }
+    public function addBookLike(Request $request, $id)
+    {
+        $user = Auth::user();
+        if(!$user || $user->role != 'reader') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+        
+        // Insertar directamente en la tabla pivot
+        BookLike::create([
+            'idbook' => $book->idbook,
+            'iduser' => $user->id
+        ]); 
+        return response()->json(['message' => 'Book liked successfully'], 200);
+    }
+
+    public function removeBookLike($id, Request $request){
+         $user = Auth::user();
+        if(!$user || $user->role != 'reader') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+        // Eliminar el like del libro
+        $bookLike = BookLike::where('idbook', $book->idbook)
+                        ->where('iduser', $user->id)
+                        ->first();
+        if (!$bookLike) {
+                return response()->json(['message' => 'Book not found'], 404);
+        }
+
+        $bookLike->delete();
+            return response()->json(
+                ['message' => 'Book unliked successfully'], 
+                200);
+        
+    }
+
+    
     
     
 }

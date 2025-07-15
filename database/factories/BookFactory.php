@@ -19,8 +19,7 @@ class BookFactory extends Factory
            'publish_date' => $this->faker->date(),
            'photo' => null,
            'content' => $this->faker->text(),
-           'status' => 'pending',
-
+           'status' => 'pending'
         ];
     }
    

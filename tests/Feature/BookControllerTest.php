@@ -188,5 +188,5 @@ class BookControllerTest extends TestCase
         $response = $this->get('/api/books');
         $response->assertStatus(200);
         $response->assertJsonStructure(['message', 'books']);
-}
+    }
 }

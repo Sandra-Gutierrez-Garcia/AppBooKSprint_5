@@ -4,7 +4,11 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Book;
+use App\Models\Writer;
 use App\Models\User;
+use App\Models\BookLike;
+use Illuminate\Support\Str;
 
 class UserControllerTest extends TestCase
 {
@@ -55,12 +59,53 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('User updated successfully');
     }
-        public function  testDelateUser(){
+    
+    public function  testDelateUser(){
             
             $user = User::factory()->create();
             $response = $this->actingAs($user, 'api')->delete("api/users/{$user->id}"); 
             $response->assertStatus(200);
             $response->assertSee('User deleted successfully');
-        }
+    }
+    
+    public function testAddlike(){
+        $user = User::factory()->create([
+       'role' => 'reader' 
+        ]);
+        $writerUser = User::factory()->create();
+        $writer = Writer::factory()->create([
+            'iduser' => $writerUser->id
+        ]);
+      
+        $book = Book::factory()->create([
+            'idwriter' => $writer->idwriter
+        ]);
+        $response = $this->actingAs($user, 'api')->post("api/books/{$book->idbook}/like");
+        
+        // Verificar que la respuesta sea exitosa
+        $response->assertStatus(200);
+        $response->assertSee('Book liked successfully');
+    }
+
+    public function testRemoveLike(){
+        $user = User::factory()->create([
+       'role' => 'reader' 
+        ]);
+        $writerUser = User::factory()->create([
+            'role' => 'writer'
+        ]);
+        $writer = Writer::factory()->create([
+            'iduser' => $writerUser->id
+        ]);
+        $book = Book::factory()->create([
+            'idwriter' => $writer->idwriter
+        ]);
+        $BookLike = BookLike::factory()->create([
+            'idbook' => $book->idbook,
+            'iduser' => $user->id
+        ]);
+        $response = $this->actingAs($user, 'api')->delete("api/books/{$book->idbook}/like");
+        $response->assertStatus(200);
+    }
 
 }

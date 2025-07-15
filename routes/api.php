@@ -21,6 +21,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::post('/books/{id}/like', [UserController::class, 'addBookLike']);
+    Route::delete('/books/{id}/like', [UserController::class, 'removeBookLike']);
 
 
 });
@@ -41,14 +43,10 @@ Route::get('/book-filter', [BookController::class, 'filterGeners']);
 Route::get('/book-filter-status', [BookController::class, 'filterStatus']);
 Route::get('/books/{id}', [BookController::class, 'show']);
 
-
+// API routes for Book actions
 Route::middleware('auth:api')->group(function(){
     Route::post('/book',[BookController::class, 'store']);
     Route::put('/book/{id}', [BookController::class, 'update']);
     Route::delete('/book/{id}', [BookController::class, 'destroy']);
-
-
-
 });
-
 

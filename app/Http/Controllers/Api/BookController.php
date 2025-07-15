@@ -62,7 +62,7 @@ class BookController extends Controller
 
             //asignar géneros si existen
              if ($request->has('genres')) {
-                $book->genres()->sync($request->genres); // Usar sync en lugar de attach
+                $book->genres()->sync($request->genres); 
             }
             
             // Devolver una respuesta JSON
@@ -209,5 +209,6 @@ class BookController extends Controller
 
 
     }
+
 
 }

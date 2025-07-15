@@ -76,7 +76,26 @@ class UserController extends Controller
             }
         }
 
-    }       
+    }   
+    
+    public function destroy($id, Request $request){
+         $user = Auth::user();
+
+        $user = User::findOrFail($id);
+        // Check if the user is authenticated
+
+        if(!$user|| $user->id != $id){
+            return response()->json(['message' => 'User not found or unauthorized'], 404);
+        }else{
+            $user->delete();
+
+            return response()->json([
+                'message' => 'User deleted successfully'
+            ], 200);
+
+        }
+    }
+    
     
 }
 

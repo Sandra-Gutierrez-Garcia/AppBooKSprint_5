@@ -46,9 +46,7 @@ class UserControllerTest extends TestCase
         $responseRutaIndix->assertSee('Access denied for writers');
     }
     public function  testUpdateUser(){
-        $user = User::factory()->create([
-            'role' => 'writer'
-        ]);
+        $user = User::factory()->create();
         $response = $this->actingAs($user, 'api')->put("api/users/{$user->id}", [
             'name' => 'Updated Name',
             'email' => 'updated@example.com',
@@ -57,4 +55,12 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('User updated successfully');
     }
+        public function  testDelateUser(){
+            
+            $user = User::factory()->create();
+            $response = $this->actingAs($user, 'api')->delete("api/users/{$user->id}"); 
+            $response->assertStatus(200);
+            $response->assertSee('User deleted successfully');
+        }
+
 }

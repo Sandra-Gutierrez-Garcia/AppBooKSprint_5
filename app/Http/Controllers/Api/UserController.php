@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\Else_;
 
 class UserController extends Controller
 {
@@ -36,5 +37,46 @@ class UserController extends Controller
             return response()->json(['message' => 'Access denied for writers'], 403);
         } 
         return response()->json($user,201);
+        if(!$user|| $user->id != $id){ 
+            return response()->json(['message' => 'User not found or unauthorized'], 404);
+        }
+        else{
+            return response()->json([
+                'message' => 'User found',
+                'user' => $user
+            ], 200);
+        }
     }
+
+     public function update(UserRequest $request,$id){
+        $user = Auth::user();
+
+        $user = User::findOrFail($id);
+        // Check if the user is authenticated
+        if(!$user|| $user->id != $id){
+            return response()->json(['message' => 'User not found or unauthorized'], 404);
+        }
+        else{
+            //si user no modifica el password
+            if(empty($request->input('password'))) {
+                $validated = $request->except('password');
+                $user->update($validated);
+                return response()->json(
+                    ['message' => 'User updated successfully'], 
+                    200);
+            }
+            //si user modifica el password
+            else {
+                $validated = $request->validated();
+                $validated['password'] = Hash::make($request->input('password'));
+                $user->update($validated);
+                  return response()->json(
+                    ['message' => 'User updated successfully'], 
+                    200);
+            }
+        }
+
+    }       
+    
 }
+

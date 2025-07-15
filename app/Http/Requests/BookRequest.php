@@ -33,6 +33,7 @@ class BookRequest extends FormRequest
          if ($this->isMethod('POST')) {
         $rules['genres'] = 'required|array|min:1';
         $rules['genres.*'] = 'required|integer|exists:genre,idgenre';
+        $rules['status'] = 'required|in:pending,completed,rejected'; // Agregar validación para el estado
         } 
         
         //para que no de error si no se envian los generos en el put

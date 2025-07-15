@@ -76,7 +76,8 @@ class BookControllerTest extends TestCase
             'publish_date' => now(),
             'photo' => null,
             'content' => 'Book content',
-            'idwriter' => $writer->idwriter
+            'idwriter' => $writer->idwriter,
+            'status' => 'pending'
         ]);
         $response->assertStatus(201);
         $response->assertSee(['Book created successfully']);
@@ -94,6 +95,7 @@ class BookControllerTest extends TestCase
             'publish_date' => now(),
             'photo' => null,
             'content' => 'Book content',
+            'status' => 'pending'
         ]);
 
         $response->assertStatus(401);
@@ -102,7 +104,33 @@ class BookControllerTest extends TestCase
 
     }
 
- 
+
+    public function testBookUpdateStatusNotmodicated()
+    {
+        $user = User::factory()->create([
+            'role' => 'writer'
+        ]);
+
+        $writer = Writer::factory()->create([
+            'iduser' => $user->id
+        ]);
+
+        $book = Book::factory()->create([
+            'idwriter' => $writer->idwriter
+        ]);
+
+         $response = $this->actingAs($user,'api')->put("api/book/{$book->idbook}",[
+            'title' => 'Book Name updated',
+            'description' => 'Book description updated',
+            'publish_date' => now(),
+            'photo' => null,
+            'content' => 'Book content updated',
+            // 'status' => 'completed' // No se modifica el estado
+        ]);
+        $response->assertStatus(200);
+        $response->assertSee('Book updated successfully');
+    }
+
     public function testBookUpdate()
     {
         $user = User::factory()->create([
@@ -123,6 +151,7 @@ class BookControllerTest extends TestCase
             'publish_date' => now(),
             'photo' => null,
             'content' => 'Book content updated',
+            'status' => 'completed'
         ]);
         $response->assertStatus(200);
         $response->assertSee('Book updated successfully');

@@ -15,33 +15,24 @@ class WriterControllerTest extends TestCase
     
     public function testWriterIndex()
     {        
-        $user = User::factory()->create([
-            'role' => 'writer'
-        ]);
-
+        $user = User::factory()->create();
+        $user->roles()->attach(2); 
         $writer = Writer::factory()->create([
-        'iduser' => $user->id
-    ]);
-
-        $this->assertEquals('writer', $user->role);
-
+            'iduser' => $user->id
+        ]);
         $response = $this->actingAs($user, 'api')->get('api/writers');
         $response->assertStatus(200); 
         $response->assertSee(['List of writers']);
-
     }
 
 
     public function testWriterShow()
     {
-        $user = User::factory()->create([
-            'role' => 'writer'
-        ]);
-
+        $user = User::factory()->create();
+        $user->roles()->attach(2); 
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);
-
         $response = $this->actingAs($user, 'api')->get("api/writers/{$writer->idwriter}");
         $response->assertStatus(200);
         $response->assertSee(['Writer found']);
@@ -50,9 +41,9 @@ class WriterControllerTest extends TestCase
  
     public function testWriterStore()
     {
-         $user = User::factory()->create([
-            'role' => 'writer'
-        ]);
+        $user = User::factory()->create();
+        // 1 reader 2 writer attasch
+        $user->roles()->attach(2); 
         $response = $this->actingAs($user, 'api')->post('api/writers',[
             'name' => 'Writer Name',
             'biography' => 'writer biography',
@@ -61,20 +52,12 @@ class WriterControllerTest extends TestCase
         ]);
         $response->assertStatus(201);
         $response->assertSee('Author created successfully');
-
-
-       
     }
 
-  
     public function testWriterUpdate()
     {
-        // Create a user and a writer for testing
-        $user = User::factory()->create([
-            'role' => 'writer'
-        ]);
-
-        // Create a writer associated with the user
+        $user = User::factory()->create();
+        $user->roles()->attach(2); 
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);
@@ -87,15 +70,10 @@ class WriterControllerTest extends TestCase
         $response->assertJson(['message' => 'Writer updated successfully']);
     }
 
-    
     public function testWriterDelete()
     {
-        // Create a user for testing
-         $user = User::factory()->create([
-            'role' => 'writer'
-        ]);
-
-        // Create a writer associated with the user
+        $user = User::factory()->create();
+        $user->roles()->attach(2); 
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);

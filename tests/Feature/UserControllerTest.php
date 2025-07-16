@@ -15,40 +15,45 @@ class UserControllerTest extends TestCase
 
     //Test for index function and route
     public function testUserIndexForWriter(){
-        $user = User::factory()->create([
-            'role' => 'writer',        
-        ]);
-        $this->assertEquals('writer', $user->role);
-        //comprovamos el Api
+        $user = User::factory()->create();
+        $user->roles()->attach(2);
+        
         $response = $this->actingAs($user, 'api')->get('api/users');
         $response->assertStatus(202); 
     }
 
 
     public function testUserIndexForReader (){
-        $response = User::factory()->create([
-            'role' => 'reader',        
-        ]);
-        $this->assertEquals('reader', $response->role);
+
+        $user = User::factory()->create();
+        $user->roles()->attach(1); 
+
+        $response = $this->actingAs($user, 'api')->get('api/users');
+        $response->assertStatus(201); 
     }
 
 
     public function testruts(){
+
         $user = User::factory()->create();
+
         $responseRutaIndix = $this->actingAs($user, 'api')->get('api/users');
         $responseRutaIndix->assertStatus(201); 
     }
 
     //test for show function and route
-    public function testUserShowForWriter(){
-        $user = user::factory()->create([
-            'role'=>'writer',
-        ]);
+    public function testUserShowForWriter()
+    {
+        $user = User::factory()->create();
+        $user->roles()->attach(2); 
+
         $responseRutaIndix = $this->actingAs($user, 'api')->get("api/users/{$user->id}");
+
         $responseRutaIndix->assertStatus(403);
         $responseRutaIndix->assertSee('Access denied for writers');
     }
     public function  testUpdateUser(){
+
         $user = User::factory()->create();
         $response = $this->actingAs($user, 'api')->put("api/users/{$user->id}", [
             'name' => 'Updated Name',
@@ -61,38 +66,38 @@ class UserControllerTest extends TestCase
     
     public function  testDelateUser(){
             
-            $user = User::factory()->create();
-            $response = $this->actingAs($user, 'api')->delete("api/users/{$user->id}"); 
-            $response->assertStatus(200);
-            $response->assertSee('User deleted successfully');
+        $user = User::factory()->create();
+        $response = $this->actingAs($user, 'api')->delete("api/users/{$user->id}"); 
+           
+        $response->assertStatus(200);
+        $response->assertSee('User deleted successfully');
     }
     
     public function testAddlike(){
-        $user = User::factory()->create([
-       'role' => 'reader' 
-        ]);
+        $user = User::factory()->create();
+        $user->roles()->attach(1); 
+
         $writerUser = User::factory()->create();
+        $writerUser->roles()->attach(2);
+        
         $writer = Writer::factory()->create([
             'iduser' => $writerUser->id
         ]);
-      
         $book = Book::factory()->create([
             'idwriter' => $writer->idwriter
         ]);
-        $response = $this->actingAs($user, 'api')->post("api/books/{$book->idbook}/like");
         
-        // Verificar que la respuesta sea exitosa
+        $response = $this->actingAs($user, 'api')->post("api/books/{$book->idbook}/like");
         $response->assertStatus(200);
         $response->assertSee('Book liked successfully');
     }
-
     public function testRemoveLike(){
-        $user = User::factory()->create([
-       'role' => 'reader' 
-        ]);
-        $writerUser = User::factory()->create([
-            'role' => 'writer'
-        ]);
+        $user = User::factory()->create();
+        $user->roles()->attach(1);
+
+        $writerUser = User::factory()->create();
+        $writerUser->roles()->attach(2); 
+
         $writer = Writer::factory()->create([
             'iduser' => $writerUser->id
         ]);
@@ -103,34 +108,30 @@ class UserControllerTest extends TestCase
             'idbook' => $book->idbook,
             'iduser' => $user->id
         ]);
+
         $response = $this->actingAs($user, 'api')->delete("api/books/{$book->idbook}/like");
         $response->assertStatus(200);
     }
-     public function testSeelikedBooks()
+    public function testSeelikedBooks()
     {
-        $user = User::factory()->create([
-            'role' => 'reader'
-        ]);
-        
-        // Crear un writer y un libro
+        $user = User::factory()->create();
+        $user->roles()->attach(1); 
+
         $writerUser = User::factory()->create();
+        $writerUser->roles()->attach(2); 
+        
         $writer = Writer::factory()->create([
             'iduser' => $writerUser->id
         ]);
         $book = Book::factory()->create([
             'idwriter' => $writer->idwriter
         ]);
-        
-        // Crear un like para el libro
         BookLike::factory()->create([
             'idbook' => $book->idbook,
             'iduser' => $user->id
         ]);
-        
         $response = $this->actingAs($user, 'api')->get('api/book/liked');
         $response->assertStatus(200);
-        
-        // Verificar que devuelve al menos un libro
         $response->assertJsonStructure([
             'message',
             'data' => [

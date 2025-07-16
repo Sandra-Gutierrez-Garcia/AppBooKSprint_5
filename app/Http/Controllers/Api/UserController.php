@@ -27,7 +27,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         // List only users with role 'writer'
-        if($user->role == 'writer') {
+        if($user->roles->contains('name', 'writer')) {
             return response()->json($user,202);
         }
         // Return user data
@@ -38,7 +38,7 @@ class UserController extends Controller
         $user= User::findOrFail($id);
 
        // check it user with id is writer
-        if($user->role == 'writer') {
+        if($user->roles->contains('name', 'writer')) {
             return response()->json(['message' => 'Access denied for writers'], 403);
         } 
         return response()->json($user,201);
@@ -103,7 +103,7 @@ class UserController extends Controller
     public function addBookLike(Request $request, $id)
     {
         $user = Auth::user();
-        if(!$user || $user->role != 'reader') {
+        if(!$user || !$user->roles->contains('name', 'reader')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         
@@ -122,7 +122,7 @@ class UserController extends Controller
 
     public function removeBookLike($id, Request $request){
          $user = Auth::user();
-        if(!$user || $user->role != 'reader') {
+        if(!$user || !$user->roles->contains('name', 'reader')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         $book = Book::find($id);
@@ -146,7 +146,7 @@ class UserController extends Controller
 
     public function seeLikeBooks(){
            $user = Auth::user();
-        if(!$user || $user->role != 'reader') {
+        if(!$user || !$user->roles->contains('name', 'reader')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         //buscamos la id de los libros que le gustan al usuario

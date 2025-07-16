@@ -39,7 +39,7 @@ class BookController extends Controller
     {
         //
         $userID = $request->user();
-        if($userID->role == 'reader'){
+        if (!$userID->roles->contains('name', 'writer')) {
             return response()->json(['Unauthorized'],401);
         }
         else{
@@ -100,10 +100,8 @@ class BookController extends Controller
     public function update( BookRequest $request, string $id)
     {
          $userID = $request->user();
-        if($userID->role == 'reader'){
-            return response()->json(
-                ['message' => 'Unauthorized'], 
-                403);
+        if (!$userID->roles->contains('name', 'writer')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
         else {  
             //buscamos la idWriter del escritor
@@ -137,10 +135,10 @@ class BookController extends Controller
     public function destroy(string $id, Request $request)
     {
          $userID = $request->user();
-        if($userID->role == 'reader'){
-            return response()->json(
-                ['message' => 'Unauthorized'], 
-                403);
+         
+        // Verifica si el usuario tiene el rol de escritor
+        if (!$userID->roles->contains('name', 'writer')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
         else{
             //buscamos la idWriter del escritor
@@ -172,10 +170,11 @@ class BookController extends Controller
                 'books' => Book::all(),
             ], 200);
         }
-        // Guardar los géneros seleccionados en la sesión
-        session(['SelectGenre' => $selectedgenres]);
-        $books = Book::whereIn('idgenres', session('SelectGenre', []))->get();
-    
+
+        $books = Book::whereHas('genres', function($query) use ($selectedgenres) {
+            $query->whereIn('genre.idgenre', $selectedgenres);
+        })->get();
+
         return response()->json([
             'message' => 'Libros filtrados',
             'books' => $books

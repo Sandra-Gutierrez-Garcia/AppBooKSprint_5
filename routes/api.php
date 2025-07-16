@@ -32,11 +32,10 @@ Route::middleware('auth:api')->group(function () {
 // API routes for writers
 Route::middleware('auth:api')->group(function(){
     Route::get('/writers', [WriterController::class, 'index']);
-    Route::get('/writers/{id}',[WriterController::class, 'show']);
+    Route::get('/writers/{id}', [WriterController::class, 'show']);
     Route::post('/writers', [WriterController::class, 'store']);
     Route::put('/writers/{id}', [WriterController::class, 'update']);
     Route::delete('/writers/{id}', [WriterController::class, 'destroy']);
-
 });
 
 // API routes for Book

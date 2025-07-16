@@ -37,6 +37,9 @@ class WriterController extends Controller
         
         // Crear el escritor
         Writer::create($validated);
+        // Asignar roles reader y writer por sus IDs
+        $user = $request->user();
+        $user->roles()->syncWithoutDetaching([1, 2]);
                
         return response()->json(
             ['message' => 'Author created successfully',
@@ -108,11 +111,14 @@ class WriterController extends Controller
         } else {
             // Elimina el escritor
             $writer->delete();
+            // Remueve el rol 'writer' (id 2) y deja solo 'reader' (id 1)
+            $user = $request->user();
+            $user->roles()->sync([1]);
             return response()->json([
-                'message' => 'Writer deleted successfully'
+                'message' => 'Writer deleted successfully, user is now only reader'
             ], 200);
+        }
     }
-}
     
 
 }

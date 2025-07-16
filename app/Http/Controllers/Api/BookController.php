@@ -170,10 +170,11 @@ class BookController extends Controller
                 'books' => Book::all(),
             ], 200);
         }
-        // Guardar los géneros seleccionados en la sesión
-        session(['SelectGenre' => $selectedgenres]);
-        $books = Book::whereIn('idgenres', session('SelectGenre', []))->get();
-    
+
+        $books = Book::whereHas('genres', function($query) use ($selectedgenres) {
+            $query->whereIn('genre.idgenre', $selectedgenres);
+        })->get();
+
         return response()->json([
             'message' => 'Libros filtrados',
             'books' => $books

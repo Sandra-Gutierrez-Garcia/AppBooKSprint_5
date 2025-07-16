@@ -21,25 +21,21 @@ class BookRequest extends FormRequest
      */
     public function rules(): array
     {
-         return [
+        $rules = [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'publish_date' => 'nullable|date',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'content' => 'required|string|min:10',
         ];
-        //para los generos if de post agregar obligaor
 
-         if ($this->isMethod('POST')) {
-        $rules['genres'] = 'required|array|min:1';
-        $rules['genres.*'] = 'required|integer|exists:genre,idgenre';
-        $rules['status'] = 'required|in:pending,completed,rejected'; // Agregar validación para el estado
-        } 
-        
-        //para que no de error si no se envian los generos en el put
-        else {
+        if ($this->isMethod('POST')) {
+            $rules['genres'] = 'required|array|min:1';
+            $rules['genres.*'] = 'integer|exists:genre,idgenre';
+        } else {
             $rules['genres'] = 'sometimes|array';
             $rules['genres.*'] = 'integer|exists:genre,idgenre';
         }
-}
+        return $rules;
+    }
 }

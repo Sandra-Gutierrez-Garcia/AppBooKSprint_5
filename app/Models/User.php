@@ -38,23 +38,22 @@ class User extends Authenticatable
     /**
      * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    /**
-     * Relación muchos a muchos con roles
-     */
-    public function roles()
+    protected function casts(): array
     {
-        return $this->belongsToMany(Role::class, 'role_user');
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
-
     public function bookLikes()
     {
         return $this->belongsToMany(Book::class, 'like_book', 'iduser', 'idbook');
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
     
 

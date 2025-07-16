@@ -79,6 +79,6 @@ class WriterControllerTest extends TestCase
         ]);
         $response = $this->actingAs($user, 'api')->delete("api/writers/{$writer->idwriter}");
         $response->assertStatus(200);
-        $response->assertJson(['message' => 'Writer deleted successfully']);
+        $response->assertJson(['message' => 'Writer deleted successfully, user is now only reader']);
     }
 }

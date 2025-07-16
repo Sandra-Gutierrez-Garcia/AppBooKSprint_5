@@ -21,10 +21,18 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-        ];
+        if ($this->isMethod('post')) {
+            return [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+            ];
+        } else {
+            return [
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|email|unique:users,email,' . $this->route('id'),
+                'password' => 'sometimes|string|min:6',
+            ];
+        }
     }
 }

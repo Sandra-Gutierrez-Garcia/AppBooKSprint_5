@@ -10,27 +10,20 @@ use App\Models\User;
 use App\Models\Genre;
 use Illuminate\Support\Str;
 
-
 class BookControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
     public function testBookIndex()
     {
-        //comprobamos la ruta
         $response = $this->get('api/books');
-
-        //comprobamos que reciba bien la informacion
         $response->assertStatus(200); 
     }
 
-   
     public function testBookShow()
     {
        $user = User::factory()->create();
        $user->roles()->attach(2); 
-
        $writer = Writer::factory()->create([
             'iduser' => $user->id,
         ]);
@@ -44,7 +37,6 @@ class BookControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $user->roles()->attach(2); 
-
         $writer = Writer::factory()->create([
             'iduser' => $user->id,
         ]);
@@ -57,17 +49,19 @@ class BookControllerTest extends TestCase
         $response->assertSee('Book not found');
     }
 
- 
     public function testBookStore()
     {
-
         $user = User::factory()->create();
         $user->roles()->attach(2);
-
+        
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);
-
+        //creamos los géneros
+        $genre = Genre::factory()->create([
+            'namegenre' => 'fantasy',
+            'idgenre' => 1
+        ]);
         $response = $this->actingAs($user,'api')->post('api/book',[
             'title' => 'Book Name',
             'description' => 'Book description',
@@ -75,48 +69,45 @@ class BookControllerTest extends TestCase
             'photo' => null,
             'content' => 'Book content',
             'idwriter' => $writer->idwriter,
-            'status' => 'pending'
+            'status' => 'pending',
+            'genres' => [$genre->idgenre]
         ]);
         $response->assertStatus(201);
         $response->assertSee(['Book created successfully']);
-
     }
 
     public function testNotAuthorizedCreateBook(){
-
         $user = User::factory()->create();
         $user->roles()->attach(1); 
-        
-         $response = $this->actingAs($user,'api')->post('api/book',[
+        $genre = Genre::factory()->create([
+            'namegenre' => 'fantasy',
+            'idgenre' => 1
+        ]);
+        $response = $this->actingAs($user,'api')->post('api/book',[
             'title' => 'Book Name',
             'description' => 'Book description',
             'publish_date' => now(),
             'photo' => null,
             'content' => 'Book content',
-            'status' => 'pending'
+            'status' => 'pending',
+            'genres' => [(int) $genre->idgenre]
         ]);
-
         $response->assertStatus(401);
         $response->assertSee('Unauthorized');
-
-
     }
-
 
     public function testBookUpdateStatusNotmodicated()
     {
         $user = User::factory()->create();
         $user->roles()->attach(2); 
-        
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);
-
+        
         $book = Book::factory()->create([
             'idwriter' => $writer->idwriter
         ]);
-
-         $response = $this->actingAs($user,'api')->put("api/book/{$book->idbook}",[
+        $response = $this->actingAs($user,'api')->put("api/book/{$book->idbook}",[
             'title' => 'Book Name updated',
             'description' => 'Book description updated',
             'publish_date' => now(),
@@ -131,16 +122,13 @@ class BookControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $user->roles()->attach(2); 
-        
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);
-
         $book = Book::factory()->create([
             'idwriter' => $writer->idwriter
         ]);
-
-         $response = $this->actingAs($user,'api')->put("api/book/{$book->idbook}",[
+        $response = $this->actingAs($user,'api')->put("api/book/{$book->idbook}",[
             'title' => 'Book Name updated',
             'description' => 'Book description updated',
             'publish_date' => now(),
@@ -152,16 +140,13 @@ class BookControllerTest extends TestCase
         $response->assertSee('Book updated successfully');
     }
 
-  
     public function testBookDelete()
     {
          $user = User::factory()->create();
          $user->roles()->attach(2); 
-         
         $writer = Writer::factory()->create([
             'iduser' => $user->id
         ]);
-
         $book = Book::factory()->create([
             'idwriter' => $writer->idwriter
         ]);
@@ -169,16 +154,14 @@ class BookControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Book deleted successfully');
     }
-   
-    public function testBookFilter(){
 
+    public function testBookFilter(){
         $response = $this->get('/api/books?genre=1');
         $response->assertStatus(200);
         $response->assertJsonStructure(['message', 'books']);
     }
     
     public function testBookWithoutGenreFilter(){
-        
         $response = $this->get('/api/books');
         $response->assertStatus(200);
         $response->assertJsonStructure(['message', 'books']);

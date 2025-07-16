@@ -39,7 +39,8 @@ class WriterController extends Controller
         Writer::create($validated);
                
         return response()->json(
-            ['message' => 'Author created successfully'], 201
+            ['message' => 'Author created successfully',
+        ], 201
         );
 
     }

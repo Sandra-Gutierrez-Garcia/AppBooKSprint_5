@@ -31,7 +31,22 @@ Els usuaris poden tenir el rol de **reader**, **writer** o ambdós.
 1. Clona el repositori
 2. Executa `composer install`
 3. Executa `npm install`
-4. Copia `.env.example` a `.env` i configura les variables d’entorn
+4. Configura la base de dades a `.env`:
+
+   - Obre el fitxer `.env` a la arrel del projecte.
+   - Assegura't que tens aquestes línies:
+     ```
+     DB_CONNECTION=sqlite
+     DB_DATABASE=database/NOM_DEL_FITXER
+     ```
+     (Per exemple: `DB_DATABASE=database/BaseSandra`)
+   - Crea el fitxer buit amb el nom que vulguis dins la carpeta `database`:
+     ```sh
+     touch database/NOM_DEL_FITXER
+     ```
+   - ⚠️ El nom i la ruta del fitxer han de coincidir exactament amb el que poses a `.env`, si no, l'aplicació donarà error.
+   - 📝 El nom és sensible a majúscules i minúscules. Si a `.env` poses `BaseSandra`, el fitxer ha de ser exactament `BaseSandra`.
+
 5. Executa `php artisan key:generate`
 6. Executa `php artisan migrate`
 7. (Opcional) Executa `php artisan db:seed`
@@ -40,17 +55,7 @@ Els usuaris poden tenir el rol de **reader**, **writer** o ambdós.
 
 - Inicia el servidor de Laravel:  
   `php artisan serve`
-- Compila els assets:  
-  `npm run dev`
 - Prova les rutes de l’API amb Thunder Client, Postman o similar.
-
-## 🌐 Desplegament
-
-- Configura `.env` per a producció
-- Executa `composer install --optimize-autoloader --no-dev`
-- Executa `npm run build`
-- Executa migracions i seeders si cal
-- Configura el servidor web per apuntar a la carpeta `public/`
 
 ## 🔒 Seguretat
 

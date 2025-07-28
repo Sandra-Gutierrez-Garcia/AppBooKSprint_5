@@ -1,61 +1,70 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# appBookApi
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📄 Descripció - Enunciat de l'exercici
 
-## About Laravel
+Aquest projecte és una API RESTful desenvolupada amb Laravel per gestionar una biblioteca digital.  
+Els usuaris poden tenir el rol de **reader**, **writer** o ambdós.  
+- Els *readers* poden llegir llibres i guardar-los a la seva llista de preferits.
+- Els *writers* poden crear llibres.
+- Un mateix usuari pot llegir i crear llibres si té els dos rols.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 💻 Tecnologies Utilitzades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP (Laravel)
+- Composer
+- SQLite/MySQL
+- Node.js & npm
+- TailwindCSS
+- Vite
+- Thunder Client (per proves d’API)
+- Laravel Passport (autenticació)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📋 Requisits
 
-## Learning Laravel
+- PHP >= 8.1
+- Composer
+- Node.js i npm
+- SQLite o MySQL
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Instal·lació
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clona el repositori
+2. Executa `composer install`
+3. Executa `npm install`
+4. Copia `.env.example` a `.env` i configura les variables d’entorn
+5. Executa `php artisan key:generate`
+6. Executa `php artisan migrate`
+7. (Opcional) Executa `php artisan db:seed`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ▶️ Execució
 
-## Laravel Sponsors
+- Inicia el servidor de Laravel:  
+  `php artisan serve`
+- Compila els assets:  
+  `npm run dev`
+- Prova les rutes de l’API amb Thunder Client, Postman o similar.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🌐 Desplegament
 
-### Premium Partners
+- Configura `.env` per a producció
+- Executa `composer install --optimize-autoloader --no-dev`
+- Executa `npm run build`
+- Executa migracions i seeders si cal
+- Configura el servidor web per apuntar a la carpeta `public/`
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🔒 Seguretat
 
-## Contributing
+- **Autenticació:**  
+  Totes les rutes de l’API estan protegides amb Laravel Passport.
+- **Sistema de rols:**  
+  Els usuaris poden ser *reader*, *writer* o ambdós, i l’accés a les rutes es restringeix segons el rol.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🧪 Testing
 
-## Code of Conduct
+- Es creen tests funcionals per a totes les rutes de l’API.
+- Es recomana aplicar TDD (Test Driven Development): escriure els tests abans del codi per definir clarament el comportament esperat de l’aplicació.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🤝 Contribucions
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Les contribucions són benvingudes!  
+Fes un fork, crea una branca i envia un pull request amb la descripció dels canvis.

@@ -1,40 +1,70 @@
-# Planificació i preguntes clau
+# appBookApi
 
-Abans de picar una sola línia de codi productiu, cal tenir clar:
+## 📄 Descripció - Enunciat de l'exercici
 
-### 1. Quina informació vull registrar?
-- Llibres: títol, descripció, data de publicació, foto, contingut, estat, autor.
-- Usuaris: nom, email, rol, etc.
-- Gèneres, escriptors, likes, rols.
+Aquest projecte és una API RESTful desenvolupada amb Laravel per gestionar una biblioteca digital.  
+Els usuaris poden tenir el rol de **reader**, **writer** o ambdós.  
+- Els *readers* poden llegir llibres i guardar-los a la seva llista de preferits.
+- Els *writers* poden crear llibres.
+- Un mateix usuari pot llegir i crear llibres si té els dos rols.
 
-### 2. Què pot fer cada tipus d’usuari?
-- **Administrador**: pot gestionar usuaris, llibres, gèneres, escriptors i assignar rols.
-- **Editor**: pot crear, editar i eliminar llibres.
-- **Usuari registrat**: pot veure llibres, donar likes, comentar.
-- **Visitant**: només pot veure llibres públics.
+## 💻 Tecnologies Utilitzades
 
-### 3. Quins són els endpoints que faré servir perquè els usuaris hi accedeixin?
-- `/api/books`: CRUD de llibres.
-- `/api/genres`: CRUD de gèneres.
-- `/api/writers`: CRUD d’escriptors.
-- `/api/likes`: donar o treure likes.
-- `/api/users`: gestió d’usuaris (només admins).
-- `/api/auth`: registre, login, logout.
+- PHP (Laravel)
+- Composer
+- SQLite/MySQL
+- Node.js & npm
+- TailwindCSS
+- Vite
+- Thunder Client (per proves d’API)
+- Laravel Passport (autenticació)
 
----
+## 📋 Requisits
 
-## Seguretat
+- PHP >= 8.1
+- Composer
+- Node.js i npm
+- SQLite o MySQL
 
-- **Autenticació amb Passport**: Totes les rutes de l’API requereixen autenticació OAuth2 amb Laravel Passport.
-- **Sistema de rols**: Defineix rols (admin, editor, usuari) i restringeix l’accés a les rutes segons el nivell de privilegis.
-- **Middleware**: Utilitza middleware per verificar el rol abans de permetre accedir a cada endpoint.
+## 🛠️ Instal·lació
 
----
+1. Clona el repositori
+2. Executa `composer install`
+3. Executa `npm install`
+4. Copia `.env.example` a `.env` i configura les variables d’entorn
+5. Executa `php artisan key:generate`
+6. Executa `php artisan migrate`
+7. (Opcional) Executa `php artisan db:seed`
 
-## Testing
+## ▶️ Execució
 
-- **TDD**: Escriu els tests funcionals abans d’implementar el codi de cada ruta.
-- **Tests funcionals**: Cobreix tots els casos d’ús (autenticació, permisos, CRUD, likes).
-- **Directori de tests**: Utilitza `tests/Feature` per als tests d’API.
+- Inicia el servidor de Laravel:  
+  `php artisan serve`
+- Compila els assets:  
+  `npm run dev`
+- Prova les rutes de l’API amb Thunder Client, Postman o similar.
 
----
+## 🌐 Desplegament
+
+- Configura `.env` per a producció
+- Executa `composer install --optimize-autoloader --no-dev`
+- Executa `npm run build`
+- Executa migracions i seeders si cal
+- Configura el servidor web per apuntar a la carpeta `public/`
+
+## 🔒 Seguretat
+
+- **Autenticació:**  
+  Totes les rutes de l’API estan protegides amb Laravel Passport.
+- **Sistema de rols:**  
+  Els usuaris poden ser *reader*, *writer* o ambdós, i l’accés a les rutes es restringeix segons el rol.
+
+## 🧪 Testing
+
+- Es creen tests funcionals per a totes les rutes de l’API.
+- Es recomana aplicar TDD (Test Driven Development): escriure els tests abans del codi per definir clarament el comportament esperat de l’aplicació.
+
+## 🤝 Contribucions
+
+Les contribucions són benvingudes!  
+Fes un fork, crea una branca i envia un pull request amb la descripció dels canvis.
